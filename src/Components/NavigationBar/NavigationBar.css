@@ -1,0 +1,22 @@
+.navigationBar{
+    display: flex;
+    justify-content: flex-end;
+    position: absolute;
+    top: 20px;
+    right:0;
+    padding: 30px;
+    color:rgb(255, 255, 255);
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+
+
+p{
+    margin: 10px;
+}
+
+nav>p:hover{
+    transition: 0.2s;
+    transform:scale(1.1)
+}
