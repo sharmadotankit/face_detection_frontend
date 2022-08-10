@@ -6,7 +6,8 @@ class Register extends Component {
         this.state = {
             registerEmail: "",
             registerName: "",
-            registerPassword: ""
+            registerPassword: "",
+            error: "",
         }
     }
 
@@ -23,31 +24,38 @@ class Register extends Component {
     }
 
     onRegisterBtnClick = () => {
-        // console.log(this.state);
-        fetch("http://localhost:3001/register", {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-            },
-            body: JSON.stringify({
-                name: this.state.registerName,
-                email: this.state.registerEmail,
-                password: this.state.registerPassword,
-            })
-        }).then(response => {
-            if (response.status === 200) {
-                (response.json().then(user => {
-                    // console.log(user)
-                    this.props.loadUser(user);
-                    this.props.onRouteChange('home');
+        if (this.state.registerEmail.length === 0 || this.state.registerName.length === 0 || this.state.registerPassword.length === 0) {
+            this.setState({ error: 'Please fill valid data' })
+        }
+        else {
+            this.setState({ error: '' });
+            fetch("http://localhost:3001/register", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({
+                    name: this.state.registerName,
+                    email: this.state.registerEmail,
+                    password: this.state.registerPassword,
+                })
+            }).then(response => {
+                if (response.status === 200) {
+                    (response.json().then(user => {
+                        // console.log(user)
+                        if (user.id) {
+                            this.props.loadUser(user);
+                            this.props.onRouteChange('home');
+                        }
+                    }
+                    ))
                 }
-                ))
-            }
-            else {
-                response.json().then(data => console.log(data.Error))
-            }
-        })
+                else {
+                    response.json().then(err => this.setState({ error: err }))
+                }
+            }).catch(err => this.setState({ error: "Unable to Register " }))
+        }
     }
 
 
@@ -89,7 +97,10 @@ class Register extends Component {
                         </div>
                         <div className="">
                             <input onClick={this.onRegisterBtnClick} className="b ph3 pv2 input-reset ba b--black white bg-transparent grow pointer f6 dib" type="submit" value="Register" />
+                            <br /><br />
+                            <h4 style={{ color: 'yellow', fontSize: '13px', fontFamily: 'Courier', fontWeight: 'bolder' }}>{this.state.error}</h4>
                         </div>
+
                     </fieldset>
                 </div>
             </main>

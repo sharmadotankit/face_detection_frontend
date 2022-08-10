@@ -93,18 +93,18 @@ class App extends Component {
 
         // console.log(this.state.user.id)
         //code to update entries
-        fetch("http://localhost:3001/image",{
+        fetch("http://localhost:3001/image", {
           method: 'PUT',
           headers: {
-            'Content-Type':'application/json',
+            'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            id:this.state.user.id
+            id: this.state.user.id
           })
-        }).then(response=> response.json())
-        .then(count => {
-          this.setState(Object.assign(this.state.user,{entries:count}))
-        });
+        }).then(response => response.json())
+          .then(count => {
+            this.setState(Object.assign(this.state.user, { entries: count }))
+          });
         //code to update user entries ends
       })
       .catch(err => console.log(err))
@@ -115,7 +115,7 @@ class App extends Component {
       this.setState({ isSignedIn: true })
     }
     else if (route === 'signin' || route === "register") {
-      this.setState({ isSignedIn: false })
+      this.setState({ isSignedIn: false, imageUrl: '' })
     }
 
 
